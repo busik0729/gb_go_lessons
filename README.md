@@ -1,1 +1,1 @@
-# gb_go_lessons
+# Geekbrains golang homework
