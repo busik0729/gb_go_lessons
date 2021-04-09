@@ -1,12 +1,12 @@
 package main
 
 import (
-	"fmt"
-	"github.com/busik0729/gb_go_lessons/lesson2"
+	"github.com/busik0729/gb_go_lessons/lesson3"
 )
 
 func main() {
-	fmt.Printf("%s \n", "Hello world")
-
-	lesson2.Start()
+	// fmt.Printf("%s \n", "Hello world")
+	//
+	// lesson2.Start()
+	lesson3.RunCalc()
 }
