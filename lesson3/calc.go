@@ -9,6 +9,27 @@ import (
 	"strings"
 )
 
+type Operations struct {
+	m int
+	n int
+}
+
+func plus(o Operations) int {
+	return o.m + o.n
+}
+
+func minus(o Operations) int {
+	return o.m - o.n
+}
+
+func multiple(o Operations) int {
+	return o.m * o.n
+}
+
+func div(o Operations) int {
+	return o.m / o.n
+}
+
 func RunCalc() {
 	expressions := make([]string, 1)
 	for {
@@ -20,7 +41,7 @@ func RunCalc() {
 			if err != nil {
 				fmt.Printf("ошибка: %s\n", err)
 			} else {
-				fmt.Printf("Результат: %.2f\n", res)
+				fmt.Printf("Результат: %d\n", res)
 			}
 			fmt.Print("Введите выражение через пробел (2 + 2): ")
 			expressions = make([]string, 1)
@@ -29,45 +50,44 @@ func RunCalc() {
 	}
 }
 
-func parseArgs(c []string) (float64, float64, error) {
-	num1, err := strconv.ParseFloat(c[0], 64)
+func parseArgs(c []string) (Operations, error) {
+	num1, err := strconv.Atoi(c[0])
 	if err != nil {
-		return 0.0, 0.0, err
+		return Operations{}, err
 	}
-	num2, err := strconv.ParseFloat(c[2], 64)
+	num2, err := strconv.Atoi(c[2])
 	if err != nil {
-		return 0.0, 0.0, err
+		return Operations{}, err
 	}
-	return num1, num2, nil
+	return Operations{m: num1, n: num2}, err
 }
 
-func processStack(e []string) (float64, error) {
-	result := 0.0
+func processStack(e []string) (int, error) {
+	result := 0
+	moper := map[string]func(o Operations) int{
+		"+": plus,
+		"-": minus,
+		"*": multiple,
+		"/": div,
+	}
 	for _, v := range e {
 		if strings.Trim(v, " ") == "" {
 			continue
 		}
 		c := strings.Split(v, " ")
 		if len(c)-1 < 2 {
-			return 0.0, errors.New("ошибка: вы ввели недостаточно аргументов или написали выражение без пробелов")
+			return 0, errors.New("ошибка: вы ввели недостаточно аргументов или написали выражение без пробелов")
 		}
-		num1, num2, err := parseArgs(c)
+		oper, err := parseArgs(c)
 		if err != nil {
-			return 0.0, err
+			return 0, err
 		}
-		switch c[1] {
-		case "+":
-			result = num1 + num2
-		case "-":
-			result = num1 - num2
-		case "*":
-			result = num1 * num2
-		case "/":
-			if num2 == 0.0 {
-				return 0.0, errors.New("ошибка: на нуль делить нельзя.")
-			}
-			result = num1 / num2
+
+		if _, ok := moper[c[1]]; !ok {
+			return 0, errors.New("ошибка: операция не распознана")
 		}
+		f := moper[c[1]]
+		result = f(oper)
 	}
 	return result, nil
 }
