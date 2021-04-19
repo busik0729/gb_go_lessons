@@ -14,19 +14,19 @@ type Operations struct {
 	n int
 }
 
-func plus(o Operations) int {
+func (o Operations) Plus() int {
 	return o.m + o.n
 }
 
-func minus(o Operations) int {
+func (o Operations) Minus() int {
 	return o.m - o.n
 }
 
-func multiple(o Operations) int {
+func (o Operations) Multiple() int {
 	return o.m * o.n
 }
 
-func div(o Operations) int {
+func (o Operations) Div() int {
 	return o.m / o.n
 }
 
@@ -64,11 +64,11 @@ func parseArgs(c []string) (Operations, error) {
 
 func processStack(e []string) (int, error) {
 	result := 0
-	moper := map[string]func(o Operations) int{
-		"+": plus,
-		"-": minus,
-		"*": multiple,
-		"/": div,
+	moper := map[string]func(Operations) int{
+		"+": Operations.Plus,
+		"-": Operations.Minus,
+		"*": Operations.Multiple,
+		"/": Operations.Div,
 	}
 	for _, v := range e {
 		if strings.Trim(v, " ") == "" {
