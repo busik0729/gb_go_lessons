@@ -6,11 +6,17 @@ import (
 )
 
 func main() {
-	// fmt.Printf("%s \n", "Hello world")
-	//
-	// lesson2.Start()
-	// lesson3.RunCalc()
-	// lesson4.Sort()
-	// lesson5.GoFib()
-	fmt.Println(lesson8.ParseConf())
+	conf, err := lesson8.ParseConfFile("conf.json")
+
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	ok, err := conf.Validate()
+	if !ok {
+		fmt.Println(err.Error())
+		return
+	}
+
+	fmt.Println(conf)
 }
