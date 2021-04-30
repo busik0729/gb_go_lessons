@@ -1,7 +1,8 @@
 package main
 
 import (
-	"github.com/busik0729/gb_go_lessons/lesson7"
+	"fmt"
+	"github.com/busik0729/gb_go_lessons/lesson8"
 )
 
 func main() {
@@ -11,5 +12,5 @@ func main() {
 	// lesson3.RunCalc()
 	// lesson4.Sort()
 	// lesson5.GoFib()
-	lesson7.RunCalc()
+	fmt.Println(lesson8.ParseConf())
 }
