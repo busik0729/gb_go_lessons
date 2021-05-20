@@ -1,6 +1,9 @@
 package lesson8
 
 import (
+	"encoding/json"
+	"errors"
+	"io/ioutil"
 	"os"
 	"reflect"
 	"strconv"
@@ -35,4 +38,20 @@ func ParseConf() Conf {
 
 func getEnv(name string) string {
 	return os.Getenv(name)
+}
+
+func ParseConfFile(path string) (Conf, error) {
+	conf := Conf{}
+
+	dat, err := ioutil.ReadFile(path)
+	if err != nil {
+		return conf, errors.New("Config error: Cannot read config file")
+	}
+
+	errUnmarshalConf := json.Unmarshal(dat, &conf)
+	if errUnmarshalConf != nil {
+		return conf, errors.New("Config error: Error unmarshal config file")
+	}
+
+	return conf, nil
 }
